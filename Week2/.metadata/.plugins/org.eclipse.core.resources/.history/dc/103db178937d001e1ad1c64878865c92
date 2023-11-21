@@ -1,0 +1,5 @@
+package com.hexaware.exception.exception;
+
+public class Student {
+
+}

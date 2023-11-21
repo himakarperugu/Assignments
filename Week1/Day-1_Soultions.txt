@@ -1,0 +1,78 @@
+create database college;
+
+use college;
+
+CREATE TABLE s_info (
+  `sid` INT NOT NULL,
+  `sname` VARCHAR(45) NULL,
+  `gpa` DECIMAL NULL,
+  `major` VARCHAR(45) NULL,
+  `enrollment_date` DATE NULL,
+  `advisor_id` INT NULL,
+  PRIMARY KEY (`sid`)
+);
+
+
+
+INSERT INTO  s_info values(101,'rahul',8.0, 'CSE', '2019-07-23',280); 
+INSERT INTO  s_info values(102,'sai', 9.0,'Civil', '2019-06-30',281); 
+INSERT INTO  s_info values(103,'charan',7.0,'ECE', '2019-09-01',282); 
+INSERT INTO  s_info values(104,'vishnu',6.0, 'CSE', '2019-08-03',283);
+
+
+ update s_info set advisor_id=280 where sid = 104;
+
+select * from s_info;
+
+ update s_info set sname='himakar' where sid = 104;
+ 
+ 
+select *
+FROM s_info
+WHERE enrollment_date BETWEEN '2019-06-30' AND '2019-08-03';
+
+select count(*) from s_info;
+
+CREATE TABLE advisor_info (
+     `advisor_id` INT NOT NULL,
+      `advisor_name` VARCHAR(45) NULL,
+     `advisor_department` VARCHAR(45) NULL,
+      PRIMARY KEY (`advisor_id`) );
+      
+      
+INSERT INTO  advisor_info values(280,'Rao','CSE'); 
+INSERT INTO  advisor_info values(281,'Naidu','ECE'); 
+INSERT INTO  advisor_info values(282,'Reddy','Civil'); 
+INSERT INTO  advisor_info values(283,'Meghana','Mech'); 
+
+select * from advisor_info;
+
+SELECT a.advisor_id, s.sname 
+FROM s_info AS s
+INNER JOIN advisor_info AS a ON s.advisor_id = a.advisor_id;
+
+select s.sid, s.advisor_id, a.advisor_department from s_info as s right join  advisor_info as a
+on s.major= a.advisor_department ;
+
+select s.sid, s.advisor_id, a.advisor_department from s_info as s left join  advisor_info as a
+on s.major= a.advisor_department ;
+
+select sname, gpa from s_info where gpa>
+(select gpa from s_info where sid=104)
+order by sid;
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE s_info(IN id int,OUT result int)
+
+
+BEGIN
+
+	select max(gpa) from s_info;
+
+END$$
+
+
+CALL s_info(101);
